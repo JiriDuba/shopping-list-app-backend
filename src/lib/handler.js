@@ -2,13 +2,10 @@
 
 import { ZodError } from 'zod';
 
-/**
- * Mocks the authenticated user's profile and ID.
- * In a real application, this would come from a JWT or session.
- */
+
 const MOCK_CURRENT_USER = {
   id: "u-a1b2c3d4e5f6g7h8i9j0", // Example UUID for the current authenticated user
-  profile: "ListOwner", // We'll assume the current user is a ListOwner for testing
+  profile: "ListMember" // Could be "User", "ListOwner", or "ListMember"
 };
 
 /**
@@ -37,7 +34,7 @@ export async function endpointHandler(req, res, schema, requiredProfile, callbac
   const { profile, id: userId } = MOCK_CURRENT_USER;
 
   if (profile !== requiredProfile) {
-    // This is a simple mock auth check. A real app would check permission roles more robustly.
+    // This is a simple mock auth check. 
     return res.status(403).json({
       code: "uu-app-authorization-error",
       message: `Profile '${profile}' does not have permission for '${requiredProfile}' command.`,
@@ -55,14 +52,20 @@ export async function endpointHandler(req, res, schema, requiredProfile, callbac
     // 5. Success Response (DtoOut must include received input data)
     return res.status(200).json(dtoOut);
 
+  // src/lib/handler.js (CORRECTED Zod Error Handling)
+
   } catch (error) {
     // 6. Error Handling
     if (error instanceof ZodError) {
-      // Zod Validation Error
+      // FIX: Call .flatten() to get the structure containing fieldErrors
+      const flattenedErrors = error.flatten(); 
+      
+      // Zod Validation Error (Return 400 Bad Request)
       return res.status(400).json({
         code: "uu-app-input-validation-error",
         message: "Input validation failed.",
-        paramMap: error.formErrors.fieldErrors,
+        // Use the corrected structure from the flattened object
+        paramMap: flattenedErrors.fieldErrors, 
         error: error.issues,
       });
     }
