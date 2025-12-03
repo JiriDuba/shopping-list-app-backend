@@ -1,10 +1,10 @@
-// src/pages/api/shoppingLists/[listId]/leave.js
+// src/pages/api/shoppingLists/[listId]/leave.js (UPDATED)
 
-import { endpointHandler, generateDtoOut } from '../../../../lib/handler';
+import { endpointHandler } from '../../../../lib/handler';
 import { ListIdOnlyDtoIn } from '../../../../lib/schemas';
+import shoppingListDao from '../../../../dao/shoppingList-dao'; // <<< IMPORT DAO
 
-const COMMAND = "shoppingList/leaveList";
-const REQUIRED_PROFILE = "User"; // ListMember rights are often treated as authenticated User rights
+const REQUIRED_PROFILE = "User"; 
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -16,13 +16,9 @@ export default async function handler(req, res) {
       res,
       ListIdOnlyDtoIn, 
       REQUIRED_PROFILE,
-      (dtoIn, userId) => {
-        const mockDtoOut = {
-            listId: dtoIn.id,
-            userId: userId,
-            message: "Successfully left list."
-        };
-        return generateDtoOut(mockDtoOut, userId, COMMAND);
+      async (dtoIn, userId) => { // <<< async callback
+        const dtoOut = await shoppingListDao.leaveList(dtoIn, userId); // <<< DAO CALL
+        return dtoOut;
       }
     );
   } else {

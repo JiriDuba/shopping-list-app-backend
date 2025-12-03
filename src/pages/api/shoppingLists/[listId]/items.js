@@ -1,9 +1,9 @@
-// src/pages/api/shoppingLists/[listId]/items.js
+// src/pages/api/shoppingLists/[listId]/items.js (UPDATED)
 
-import { endpointHandler, generateDtoOut } from '../../../../lib/handler';
+import { endpointHandler } from '../../../../lib/handler';
 import { AddItemDtoIn } from '../../../../lib/schemas';
+import shoppingListDao from '../../../../dao/shoppingList-dao';
 
-const COMMAND = "shoppingList/addItem";
 const REQUIRED_PROFILE = "ListMember"; 
 
 export default async function handler(req, res) {
@@ -16,18 +16,9 @@ export default async function handler(req, res) {
       res,
       AddItemDtoIn, // Schema requires ID (URL) and itemName (Body)
       REQUIRED_PROFILE,
-      (dtoIn, userId) => {
-        const mockNewItemId = "i-55555555-4444-3333-2222-111111111111";
-
-        const mockDtoOut = {
-            listId: dtoIn.id,
-            item: {
-                id: mockNewItemId,
-                name: dtoIn.itemName, // Echo back input name
-                addedBy: userId
-            }
-        };
-        return generateDtoOut(mockDtoOut, userId, COMMAND);
+      async (dtoIn, userId) => {
+        const dtoOut = await shoppingListDao.addItem(dtoIn, userId);
+        return dtoOut;
       }
     );
   } else {

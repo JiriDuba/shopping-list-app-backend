@@ -1,9 +1,9 @@
-// src/pages/api/shoppingLists/[listId]/archive.js
+// src/pages/api/shoppingLists/[listId]/archive.js (UPDATED)
 
-import { endpointHandler, generateDtoOut } from '../../../../lib/handler';
+import { endpointHandler } from '../../../../lib/handler';
 import { ListIdOnlyDtoIn } from '../../../../lib/schemas';
+import shoppingListDao from '../../../../dao/shoppingList-dao'; // <<< IMPORT DAO
 
-const COMMAND = "shoppingList/archiveList";
 const REQUIRED_PROFILE = "ListOwner"; 
 
 export default async function handler(req, res) {
@@ -14,15 +14,11 @@ export default async function handler(req, res) {
     await endpointHandler(
       req,
       res,
-      ListIdOnlyDtoIn, // Schema only requires the ID
+      ListIdOnlyDtoIn, 
       REQUIRED_PROFILE,
-      (dtoIn, userId) => {
-        const mockDtoOut = {
-            id: dtoIn.id,
-            state: "archived",
-            updatedBy: userId
-        };
-        return generateDtoOut(mockDtoOut, userId, COMMAND);
+      async (dtoIn, userId) => { // <<< async callback
+        const dtoOut = await shoppingListDao.archiveList(dtoIn, userId); // <<< DAO CALL
+        return dtoOut;
       }
     );
   } else {

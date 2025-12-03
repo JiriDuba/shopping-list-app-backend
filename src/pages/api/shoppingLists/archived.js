@@ -1,9 +1,9 @@
-// src/pages/api/shoppingLists/archived.js
+// src/pages/api/shoppingLists/archived.js (UPDATED)
 
-import { endpointHandler, generateDtoOut } from '../../../lib/handler';
+import { endpointHandler } from '../../../lib/handler';
 import { GetListsDtoIn } from '../../../lib/schemas';
+import shoppingListDao from '../../../dao/shoppingList-dao';
 
-const COMMAND = "shoppingList/getArchivedLists"; // <--- CHANGE
 const REQUIRED_PROFILE = "User"; 
 
 export default async function handler(req, res) {
@@ -13,21 +13,9 @@ export default async function handler(req, res) {
       res,
       GetListsDtoIn, 
       REQUIRED_PROFILE,
-      (dtoIn, userId) => {
-        // --- APPLICATION LOGIC MOCK ---
-        // Mock a list of archived shopping lists.
-        const mockList = { id: "c1d2-archived-list", name: "Old Xmas Shopping List" };
-        
-        const dtoOutData = {
-          pageInfo: {
-            ...dtoIn, 
-            total: 2 // Mock total count
-          },
-          itemList: [mockList],
-          user: { id: userId, listsCount: 2 } 
-        };
-
-        return generateDtoOut(dtoOutData, userId, COMMAND);
+      async (dtoIn, userId) => {
+        const dtoOut = await shoppingListDao.listArchived(dtoIn, userId);
+        return dtoOut;
       }
     );
   } else {

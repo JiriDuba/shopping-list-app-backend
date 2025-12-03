@@ -1,9 +1,9 @@
 // src/pages/api/shoppingLists/[listId]/members.js
 
-import { endpointHandler, generateDtoOut } from '../../../../lib/handler';
+import { endpointHandler } from '../../../../lib/handler';
 import { AddMemberDtoIn } from '../../../../lib/schemas';
+import shoppingListDao from '../../../../dao/shoppingList-dao';
 
-const COMMAND = "shoppingList/addMember";
 const REQUIRED_PROFILE = "ListOwner"; 
 
 export default async function handler(req, res) {
@@ -14,15 +14,11 @@ export default async function handler(req, res) {
     await endpointHandler(
       req,
       res,
-      AddMemberDtoIn, // Schema requires ID (URL) and memberId (Body)
+      AddMemberDtoIn, 
       REQUIRED_PROFILE,
-      (dtoIn, userId) => {
-        const mockDtoOut = {
-            listId: dtoIn.id,
-            addedMemberId: dtoIn.memberId, // Echo back memberId
-            membersCount: 4 // Mock count
-        };
-        return generateDtoOut(mockDtoOut, userId, COMMAND);
+      async (dtoIn, userId) => {
+        const dtoOut = await shoppingListDao.addMember(dtoIn, userId); 
+        return dtoOut;
       }
     );
   } else {

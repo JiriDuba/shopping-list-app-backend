@@ -1,9 +1,9 @@
-// src/pages/api/shoppingLists/active.js
+// src/pages/api/shoppingLists/active.js (UPDATED)
 
-import { endpointHandler, generateDtoOut } from '../../../lib/handler';
+import { endpointHandler } from '../../../lib/handler';
 import { GetListsDtoIn } from '../../../lib/schemas';
+import shoppingListDao from '../../../dao/shoppingList-dao'; // <<< IMPORT DAO
 
-const COMMAND = "shoppingList/getActiveLists";
 const REQUIRED_PROFILE = "User"; 
 
 export default async function handler(req, res) {
@@ -11,24 +11,11 @@ export default async function handler(req, res) {
     await endpointHandler(
       req,
       res,
-      GetListsDtoIn, // Uses schema for pagination (page, limit)
+      GetListsDtoIn, 
       REQUIRED_PROFILE,
-      (dtoIn, userId) => {
-        // --- APPLICATION LOGIC MOCK ---
-        // Mock a list of active shopping lists owned/joined by the user.
-        const mockList = { id: "a1b2-active-list", name: "Current Shopping List" };
-        
-        const dtoOutData = {
-          pageInfo: {
-            ...dtoIn, // Echo back pagination input
-            total: 10 // Mock total count
-          },
-          itemList: [mockList],
-          // Additional mock metadata
-          user: { id: userId, listsCount: 3 } 
-        };
-
-        return generateDtoOut(dtoOutData, userId, COMMAND);
+      async (dtoIn, userId) => { // <<< async callback
+        const dtoOut = await shoppingListDao.listActive(dtoIn, userId); // <<< DAO CALL
+        return dtoOut;
       }
     );
   } else {

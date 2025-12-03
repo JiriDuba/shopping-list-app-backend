@@ -1,9 +1,9 @@
-// src/pages/api/shoppingLists/[listId]/members/[memberId].js
+// src/pages/api/shoppingLists/[listId]/members/[memberId].js (UPDATED)
 
-import { endpointHandler, generateDtoOut } from '../../../../../lib/handler';
+import { endpointHandler } from '../../../../../lib/handler';
 import { RemoveMemberDtoIn } from '../../../../../lib/schemas';
+import shoppingListDao from '../../../../../dao/shoppingList-dao';
 
-const COMMAND = "shoppingList/removeMember";
 const REQUIRED_PROFILE = "ListOwner"; 
 
 export default async function handler(req, res) {
@@ -11,20 +11,17 @@ export default async function handler(req, res) {
     // Map URL parameters into DtoIn: listId -> id, memberId -> memberId
     req.query.id = req.query.listId; 
     req.query.memberId = req.query.memberId; 
-    delete req.query.listId; // Keep the original listId cleanup
+    delete req.query.listId; 
+    delete req.query.memberId; 
 
     await endpointHandler(
       req,
       res,
       RemoveMemberDtoIn, 
       REQUIRED_PROFILE, 
-      (dtoIn, userId) => {
-        const mockDtoOut = {
-            listId: dtoIn.id,
-            removedMemberId: dtoIn.memberId, 
-            membersCount: 2 
-        };
-        return generateDtoOut(mockDtoOut, userId, COMMAND);
+      async (dtoIn, userId) => {
+        const dtoOut = await shoppingListDao.removeMember(dtoIn, userId); 
+        return dtoOut;
       }
     );
   } else {
