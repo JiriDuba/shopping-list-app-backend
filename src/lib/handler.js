@@ -13,7 +13,7 @@ const MOCK_CURRENT_USER = {
 
 /**
  * Middleware that handles input parsing, Zod validation, and mock authorization.
- * * @param {object} req - Next.js/Express Request object
+ * @param {object} req - Next.js/Express Request object
  * @param {object} res - Next.js/Express Response object
  * @param {object} schema - The Zod schema (DtoIn) to use for validation
  * @param {string} requiredProfile - The profile required for this command (User, ListOwner, ListMember)
@@ -34,8 +34,10 @@ export async function endpointHandler(req, res, schema, requiredProfile, callbac
     dtoIn = { ...req.body, ...req.query };
   }
 
-  // 2. Authorization Check (Mock)
-  if (profile !== requiredProfile) {
+  // 2. Authorization Check
+  // Note: For now, we are skipping detailed profile checks and only checking if the user is authenticated.
+  // if (profile !== requiredProfile && requiredProfile !== 'User') {
+  if (profile === 'Guest' && requiredProfile !== 'Guest') { // Příklad, pokud by existoval Guest
     return res.status(403).json({
       code: "uu-app-authorization-error",
       message: `Profile '${profile}' does not have permission for '${requiredProfile}' command.`,
@@ -47,6 +49,9 @@ export async function endpointHandler(req, res, schema, requiredProfile, callbac
     const validatedDtoIn = schema.parse(dtoIn);
 
     // 4. Execute Logic (MUST BE AWAITED for database calls)
+    // Zde voláme callback, který buď mockuje odpověď nebo volá DAO.
+    // DAO by mělo vrátit již finální DTO-Out s polem 'data' a 'sys'.
+    // Pokud callback vrátí jen 'data' objekt, použijeme generateDtoOut.
     const dtoOut = await callback(validatedDtoIn, userId);
     
     // 5. Success Response
@@ -82,7 +87,42 @@ export async function endpointHandler(req, res, schema, requiredProfile, callbac
     return res.status(500).json({
       code: "uu-app-internal-server-error",
       message: "An unexpected error occurred.",
-      error: error.message, 
+      error: error.message,
     });
   }
+}
+
+// =========================================================================
+// OPRAVENÁ FUNKCE generateDtoOut
+// =========================================================================
+
+/**
+ * Generates the DtoOut structure by wrapping the application data and adding system fields.
+ * DŮLEŽITÉ: Nyní správně zachovává pole 'id' ve výstupu 'data'.
+ * * @param {object} dtoOutData - Data objekt vrácený z aplikační logiky (DAO/Mock)
+ * @param {string} userId - ID autentizovaného uživatele
+ * @param {string} command - Název provedeného příkazu
+ * @returns {object} Finální DTO-Out struktura (data + sys)
+ */
+export function generateDtoOut(dtoOutData, userId, command) {
+  // 1. Získání aktuálních časových údajů a profilu
+  const now = new Date().toISOString();
+  const profile = MOCK_CURRENT_USER.profile; 
+
+  // 2. Vytvoření bloku 'sys'
+  // Vytvoří se kopie dtoOutData, ke které se přidají systémová pole.
+  // Zajišťuje, že všechna pole z dtoOutData (včetně id, name, atd.) jsou součástí sys.
+  const sys = {
+    command: command,
+    profile: profile,
+    currentTime: now,
+    serverTime: now,
+    ...dtoOutData, // Správné zkopírování dat do 'sys'
+  };
+
+  // 3. Vrácení finální DTO-Out struktury
+  return {
+    data: dtoOutData, // Objekt dat beze změny (s polem id)
+    sys: sys,
+  };
 }

@@ -19,7 +19,6 @@ function createDtoOut(doc, command, userId) {
     // Clean up internal Mongoose fields (_id, __v)
     delete data._id;
     delete data.__v;
-    delete data.id; // virtual id is already mapped to data.id
     
     // Generate system fields
     const now = new Date().toISOString();

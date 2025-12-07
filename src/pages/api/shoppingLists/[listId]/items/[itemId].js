@@ -2,6 +2,7 @@
 
 import { endpointHandler } from '../../../../../lib/handler';
 import { ItemActionDtoIn } from '../../../../../lib/schemas'; // Assuming ItemActionDtoIn exists
+import shoppingListDao from '../../../../../dao/shoppingList-dao';
 
 export default async function handler(req, res) {
   // Map the two URL parameters into the single DtoIn object: id and itemId

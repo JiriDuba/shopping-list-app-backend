@@ -1,4 +1,4 @@
-// src/pages/api/shoppingLists/[listId]/members/[memberId].js (UPDATED)
+// src/pages/api/shoppingLists/[listId]/members/[memberId].js (OPRAVENO)
 
 import { endpointHandler } from '../../../../../lib/handler';
 import { RemoveMemberDtoIn } from '../../../../../lib/schemas';
@@ -8,18 +8,23 @@ const REQUIRED_PROFILE = "ListOwner";
 
 export default async function handler(req, res) {
   if (req.method === 'DELETE') {
-    // Map URL parameters into DtoIn: listId -> id, memberId -> memberId
+    // 1. Namapujte listId (z URL) na klíč 'id', který Zod očekává v DtoIn.
     req.query.id = req.query.listId; 
-    req.query.memberId = req.query.memberId; 
+    
+    // 2. KLÍČOVÝ ŘÁDEK: memberId je již v req.query, takže ho nemusíte znovu mapovat
+    // a HLAVNĚ ho nesmíte mazat.
+    
+    // 3. Odstraňte pouze původní klíč 'listId'
     delete req.query.listId; 
-    delete req.query.memberId; 
-
+    // 🛑 NEODSTRAŇUJTE req.query.memberId!
+    
     await endpointHandler(
       req,
       res,
       RemoveMemberDtoIn, 
       REQUIRED_PROFILE, 
       async (dtoIn, userId) => {
+        // ... (zde volání DAO)
         const dtoOut = await shoppingListDao.removeMember(dtoIn, userId); 
         return dtoOut;
       }

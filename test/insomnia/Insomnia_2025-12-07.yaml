@@ -1,0 +1,340 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Shopping_app
+meta:
+  id: wrk_641d7844948f4af29e1b96f4cbdc5d21
+  created: 1765012494040
+  modified: 1765012528867
+  description: ""
+collection:
+  - url: http://localhost:3000/api/shoppingLists/f08b30fd-4fdb-4065-89af-0175ee81f791
+    name: updateListName
+    meta:
+      id: req_333fe8888dc84ee1a7ceaf327c090a65
+      created: 1765012494166
+      modified: 1765023325574
+      isPrivate: false
+      description: ""
+      sortKey: -1765012494166
+    method: PUT
+    body:
+      mimeType: application/json
+      text: '{"name": "Dovolená 2026"}'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/f08b30fd-4fdb-4065-89af-0175ee81f791
+    name: loadList
+    meta:
+      id: req_c6c30acb773d45a68dd7d2fa0336276a
+      created: 1765023190305
+      modified: 1765023277904
+      isPrivate: false
+      description: ""
+      sortKey: -1765023190305
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/f08b30fd-4fdb-4065-89af-0175ee81f791/archive
+    name: archiveList
+    meta:
+      id: req_c872953e798f4f5aa0d11cdc3e2f1596
+      created: 1765023288514
+      modified: 1765023435537
+      isPrivate: false
+      description: ""
+      sortKey: -1765023288514
+    method: PUT
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/f08b30fd-4fdb-4065-89af-0175ee81f791
+    name: deleteList
+    meta:
+      id: req_840e94d8e61b472b80333ebbab82c87e
+      created: 1765023443297
+      modified: 1765023489998
+      isPrivate: false
+      description: ""
+      sortKey: -1765023443297
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/f08b30fd-4fdb-4065-89af-0175ee81f791
+    name: loadList(after delete)
+    meta:
+      id: req_6f300382ca1646e7a1014696d0615da4
+      created: 1765023514826
+      modified: 1765023544607
+      isPrivate: false
+      description: ""
+      sortKey: -1765023514826
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/8560b6b4-92a8-495b-9bc3-808c0b9de1ab/members
+    name: addMember
+    meta:
+      id: req_f55b8e0a9ddf4e8f83c3d2418c842b19
+      created: 1765023559491
+      modified: 1765122112256
+      isPrivate: false
+      description: ""
+      sortKey: -1765023559491
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        
+        { 
+          "memberId": "3a5b14f2-82f7-4a0f-90b5-7c01a2f4e3c9" 
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/ee425d95-867c-4f4e-b11c-876df6b17d12/leave
+    name: leaveList
+    meta:
+      id: req_9c06aac68f3141a6b47f027bc5fd9df9
+      created: 1765121407176
+      modified: 1765121469460
+      isPrivate: false
+      description: ""
+      sortKey: -1765121407176
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/8560b6b4-92a8-495b-9bc3-808c0b9de1ab/members/3a5b14f2-82f7-4a0f-90b5-7c01a2f4e3c9
+    name: removeMember
+    meta:
+      id: req_22d048fc275e41c280cd8cd9c5b67eba
+      created: 1765121782272
+      modified: 1765125661475
+      isPrivate: false
+      description: ""
+      sortKey: -1765121782272
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/8560b6b4-92a8-495b-9bc3-808c0b9de1ab/items
+    name: addItem
+    meta:
+      id: req_10980423c52c453f8ba3d5e9b94841fb
+      created: 1765125664649
+      modified: 1765125720047
+      isPrivate: false
+      description: ""
+      sortKey: -1765125664649
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{ "itemName": "Banány" }'
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/8560b6b4-92a8-495b-9bc3-808c0b9de1ab/items/0e75502c-fc01-4370-ba60-7484260a076d
+    name: resolveItem
+    meta:
+      id: req_c2f72eb7920c42e88e32a5d433ebca88
+      created: 1765125734443
+      modified: 1765125868399
+      isPrivate: false
+      description: ""
+      sortKey: -1765125734443
+    method: PUT
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/8560b6b4-92a8-495b-9bc3-808c0b9de1ab/items/0e75502c-fc01-4370-ba60-7484260a076d
+    name: removeItem
+    meta:
+      id: req_24cb4b682c524c44967f0b0ed6f6e770
+      created: 1765126321428
+      modified: 1765126511689
+      isPrivate: false
+      description: ""
+      sortKey: -1765126321428
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/active
+    name: getActiveLists
+    meta:
+      id: req_3e964baf30314bbda7d0750a6d408797
+      created: 1765126572793
+      modified: 1765126609291
+      isPrivate: false
+      description: ""
+      sortKey: -1765126572793
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/shoppingLists/archived
+    name: getArchivedLists
+    meta:
+      id: req_f047d80868ba456bb134e46411badd5d
+      created: 1765126633349
+      modified: 1765126752815
+      isPrivate: false
+      description: ""
+      sortKey: -1765126633349
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_6ef8e3d8b464adfbede35bc857b2cbc2b5371492
+    created: 1765012494045
+    modified: 1765012494045
+environments:
+  name: Base Environment
+  meta:
+    id: env_6ef8e3d8b464adfbede35bc857b2cbc2b5371492
+    created: 1765012494043
+    modified: 1765013025393
+    isPrivate: false
