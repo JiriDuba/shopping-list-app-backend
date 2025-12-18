@@ -1,30 +1,27 @@
-// src/pages/api/shoppingLists/[listId]/members/[memberId].js (OPRAVENO)
+// src/pages/api/shoppingLists/[listId]/members/[memberId].js
 
-import { endpointHandler } from '../../../../../lib/handler';
-import { RemoveMemberDtoIn } from '../../../../../lib/schemas';
-import shoppingListDao from '../../../../../dao/shoppingList-dao';
+// Změna na require pro zajištění kompatibility s upraveným DAO
+const { endpointHandler } = require('../../../../../lib/handler');
+const { RemoveMemberDtoIn } = require('../../../../../lib/schemas');
+const shoppingListDao = require('../../../../../dao/shoppingList-dao');
 
 const REQUIRED_PROFILE = "ListOwner"; 
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method === 'DELETE') {
-    // 1. Namapujte listId (z URL) na klíč 'id', který Zod očekává v DtoIn.
+    // Mapování URL parametrů do DtoIn
     req.query.id = req.query.listId; 
-    
-    // 2. KLÍČOVÝ ŘÁDEK: memberId je již v req.query, takže ho nemusíte znovu mapovat
-    // a HLAVNĚ ho nesmíte mazat.
-    
-    // 3. Odstraňte pouze původní klíč 'listId'
+    req.query.memberId = req.query.memberId; 
     delete req.query.listId; 
-    // 🛑 NEODSTRAŇUJTE req.query.memberId!
-    
+    delete req.query.memberId; 
+
     await endpointHandler(
       req,
       res,
       RemoveMemberDtoIn, 
       REQUIRED_PROFILE, 
       async (dtoIn, userId) => {
-        // ... (zde volání DAO)
+        // Volání DAO metody
         const dtoOut = await shoppingListDao.removeMember(dtoIn, userId); 
         return dtoOut;
       }
@@ -33,3 +30,5 @@ export default async function handler(req, res) {
     res.status(405).json({ code: "method-not-allowed", message: `${req.method} method not allowed.` });
   }
 }
+
+module.exports = handler;

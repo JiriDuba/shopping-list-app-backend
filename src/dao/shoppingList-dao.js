@@ -1,10 +1,9 @@
-// src/dao/shoppingList-dao.js
 
-import { connectToDatabase } from '../lib/mongo';
-import ShoppingListModel from '../models/ShoppingList';
-import { v4 as uuidv4 } from 'uuid'; // Need to install this package for UUID generation
+const { connectToDatabase } = require('../lib/mongo');
+const ShoppingListModel = require('../models/ShoppingList');
 
-
+// Toto je nejkompatibilnější způsob, jak vytáhnout v4 funkci v CommonJS bez ESM chyb
+const uuidv4 = () => require('crypto').randomUUID();
 /**
  * Ensures database connection and returns a clean DTO-Out object from the Mongoose document.
  * @param {object} doc - Mongoose Document
@@ -565,4 +564,5 @@ const shoppingListDao = {
 };
 
 // --- Export the DAO object as the module default ---
-export default shoppingListDao;
+//export default shoppingListDao;
+module.exports = shoppingListDao;
